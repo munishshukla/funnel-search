@@ -36,6 +36,9 @@
   .textColor {
     color: #26495c;
   }
+  .icon-cross{
+    cursor: pointer;
+  }
 </style>
 
 <body>
@@ -91,14 +94,20 @@
           <div id="queryContent">
             <div class="form-group">
               <div class="has-icon-right" data-tooltip="Lorem ipsum dolor sit amet">
-                <input class="form-input" type="text" placeholder="Include Words"><i
-                  class="form-icon icon icon-cross"></i>
+                <input class="form-input" type="text" placeholder="Include Words" id="queryInclude">
+                <i class="form-icon icon icon-cross"></i>
               </div>
             </div>
             <div class="form-group">
               <div class="has-icon-right">
-                <input class="form-input" type="text" placeholder="Exclude Words"><i
-                  class="form-icon icon icon-cross"></i>
+                <input class="form-input" type="text" placeholder="Exclude Words" id="queryExclude">
+                <i class="form-icon icon icon-cross"></i>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="has-icon-right">
+                <input class="form-input" type="text" placeholder="Exact Match" id="queryExact">
+                <i class="form-icon icon icon-cross"></i>
               </div>
             </div>
           </div>
@@ -106,7 +115,7 @@
 
           <div id="countryContent" style="display: none;">
             <div class="form-group">
-              <select class="form-select">
+              <select class="form-select" id="countryId">
                 <option>Choose an option</option>
                 <option>Slack</option>
                 <option>Skype</option>
@@ -117,14 +126,15 @@
 
           <div id="domainContent" style="display: none;">
             <div class="has-icon-right">
-              <input class="form-input" type="text" placeholder="Domain"><i class="form-icon icon icon-cross"></i>
+              <input class="form-input" type="text" placeholder="Domain" id="domainInput">
+              <i class="form-icon icon icon-cross"></i>
             </div>
           </div>
 
 
           <div id="languageContent" style="display: none;">
             <div class="form-group">
-              <select class="form-select">
+              <select class="form-select" id="languageId">
                 <option>Choose an option</option>
                 <option>Slack</option>
                 <option>Skype</option>
@@ -136,7 +146,7 @@
 
           <div id="fileContent" style="display: none;">
             <div class="form-group">
-              <select class="form-select">
+              <select class="form-select" id="fileId">
                 <option>Choose an option</option>
                 <option>Slack</option>
                 <option>Skype</option>
@@ -150,17 +160,17 @@
             <div class="form-group">
 
               <div class="has-icon-right">
-                <input class="form-input" id="input-example-14" type="date">
+                <input class="form-input" id="timeFrom" type="date">
               </div>
             </div>
             <div class="form-group">
 
               <div class="has-icon-right">
-                <input class="form-input" id="input-example-14" type="date">
+                <input class="form-input" id="timeTo" type="date">
               </div>
             </div>
             <div class="form-group">
-              <select class="form-select">
+              <select class="form-select" id="timeRange">
                 <option>Choose an option</option>
                 <option>Slack</option>
                 <option>Skype</option>
