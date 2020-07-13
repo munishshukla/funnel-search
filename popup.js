@@ -63,6 +63,9 @@ for (let index = 0; index < removeElement.length; index++) {
     event.target.previousElementSibling.value = "";
   }
 }
+
+//Load County array 
+
 // document.getElementById("countryId").selectedIndex = 0;
 // document.getElementById("timeFrom").value = ""
 
