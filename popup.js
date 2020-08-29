@@ -32,6 +32,7 @@ menu.push(time);
 for (let index = 0; index < menu.length; index++) {
   const element = menu[index];
   element.onclick = function (event) {
+    console.log("Trigger",event);
     removeActiveClassFromMenu();
     event.target.parentElement.classList.add("active");
     document.getElementById(
@@ -56,13 +57,31 @@ function removeActiveClassFromMenu() {
 //   console.log(event.target.parentElement);
 // }
 
-var removeElement = document.getElementsByClassName("icon-cross");
+var removeElement = document.getElementsByClassName("removeData");
 for (let index = 0; index < removeElement.length; index++) {
   const element = removeElement[index];
   element.onclick = function (event) {
     event.target.previousElementSibling.value = "";
   }
 }
+
+document.getElementById('queryInclude').onblur = function(event) {
+  console.log("In the blur function");
+  console.log(event.target.value);
+}
+
+document.getElementById("test").onclick = function(event) {
+  console.log("onclick test function");
+  document.getElementById("country").firstElementChild.click()
+  var badge = document.createElement('span');
+  var textnode = document.createTextNode('Munish');
+  badge.appendChild(textnode);
+  badge.classList.add("chip");
+  badge.setAttribute('id','munishwaaa');
+  document.getElementById("badgeLocation").appendChild(badge);
+  // console.log(event.target);
+}
+
 
 //Load County array 
 

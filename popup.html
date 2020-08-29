@@ -96,19 +96,19 @@
             <div class="form-group">
               <div class="has-icon-right" data-tooltip="Lorem ipsum dolor sit amet">
                 <input class="form-input" type="text" placeholder="Include Words" id="queryInclude">
-                <i class="form-icon icon icon-cross"></i>
+                <i class="form-icon icon icon-cross removeData"></i>
               </div>
             </div>
             <div class="form-group">
               <div class="has-icon-right">
                 <input class="form-input" type="text" placeholder="Exclude Words" id="queryExclude">
-                <i class="form-icon icon icon-cross"></i>
+                <i class="form-icon icon icon-cross removeData"></i>
               </div>
             </div>
             <div class="form-group">
               <div class="has-icon-right">
                 <input class="form-input" type="text" placeholder="Exact Match" id="queryExact">
-                <i class="form-icon icon icon-cross"></i>
+                <i class="form-icon icon icon-cross removeData"></i>
               </div>
             </div>
           </div>
@@ -606,7 +606,7 @@
           <div id="domainContent" style="display: none;">
             <div class="has-icon-right">
               <input class="form-input" type="text" placeholder="Domain" id="domainInput">
-              <i class="form-icon icon icon-cross"></i>
+              <i class="form-icon icon icon-cross removeData"></i>
             </div>
           </div>
 
@@ -779,9 +779,14 @@
 
         </div>
         <div class="panel-footer">
-          <div class="column col-12"><span class="chip">Crime</span><span class="chip">Drama</span><span
-              class="chip">Biography<a class="btn btn-clear" href="#" aria-label="Close" role="button"></a></span><span
-              class="chip">Mystery<a class="btn btn-clear" href="#" aria-label="Close" role="button"></a></span></div>
+          <div class="column col-12" id="badgeLocation">
+            <span class="chip" id="test">Crime</span>
+            <span class="chip">Drama</span>
+            <span class="chip">Biography<a class="btn btn-clear" href="#" aria-label="Close" role="button">
+
+              </a></span>
+            <span class="chip">Mystery<a class="btn btn-clear" href="#" aria-label="Close" role="button"></a></span>
+          </div>
         </div>
 
       </div>
