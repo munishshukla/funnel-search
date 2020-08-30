@@ -32,7 +32,6 @@ menu.push(time);
 for (let index = 0; index < menu.length; index++) {
   const element = menu[index];
   element.onclick = function (event) {
-    console.log("Trigger",event);
     removeActiveClassFromMenu();
     event.target.parentElement.classList.add("active");
     document.getElementById(
@@ -53,63 +52,85 @@ function removeActiveClassFromMenu() {
   }
 }
 
-// function clearInput(event) {
-//   console.log(event.target.parentElement);
-// }
-
 var removeElement = document.getElementsByClassName("removeData");
 for (let index = 0; index < removeElement.length; index++) {
   const element = removeElement[index];
   element.onclick = function (event) {
+    console.log("event", event.target);
+    console.log(event.target.previousElementSibling);
     event.target.previousElementSibling.value = "";
+    let chipId = event.target.previousElementSibling.id;
+    removeChip(chipId);
   }
 }
 
-document.getElementById('queryInclude').onblur = function(event) {
-  console.log("In the blur function");
-  console.log(event.target.value);
+function removeChip(id) {
+  let doc = document.getElementById(id + 'chip');
+  if(doc){
+    doc.remove();
+  }
 }
 
-document.getElementById("test").onclick = function(event) {
-  console.log("onclick test function");
-  document.getElementById("country").firstElementChild.click()
-  var badge = document.createElement('span');
-  var textnode = document.createTextNode('Munish');
-  badge.appendChild(textnode);
-  badge.classList.add("chip");
-  badge.setAttribute('id','munishwaaa');
-  document.getElementById("badgeLocation").appendChild(badge);
-  // console.log(event.target);
+var textField = document.getElementsByClassName("textfield");
+for (let itr = 0; itr < textField.length; itr++) {
+  const element = textField[itr];
+  element.onblur = function (event) {
+    let id = event.target.id;
+    let value = event.target.value;
+    let target = event.target.getAttribute('activate');
+    if (value && value.trim() !== '') {
+      addClip(id, value, target);
+    }else{
+      removeChip(id);
+    }
+  }
 }
 
+var selectbox = document.getElementsByClassName("selectbox");
+for (let itr = 0; itr < selectbox.length; itr++) {
+  const element = selectbox[itr];
+  element.onchange = function (event) {
+    let id = event.target.id;
+    let target = event.target.getAttribute('activate');
+    let index = event.target.selectedIndex;
+    console.log('id', id);
+    console.log('target', this.target);
+    if(index===0){
+      // remove if exist
+      removeChip(id);
+    }else{
+      let value = event.target.options[index].text;
+      console.log('value',value);
+      addClip(id, value, target);
+    }
+  }
+}
 
-//Load County array 
+function addClip(id, value, target) {
+  if (value && value.trim() !== '') {
+    value = value.trim();
+    var badge = document.createElement('span');
+    var textnode = document.createTextNode(value);
+    badge.appendChild(textnode);
+    // badge.classList.add("label");
+    // badge.classList.add("label-error");
+    // badge.classList.add("label-rounded");
+    badge.classList.add('chip');
+    badge.classList.add("chipAction");
+    badge.setAttribute('activate', target); // use for navigation
+    badge.setAttribute('id', id + 'chip'); //use to remove chip
+    document.getElementById("badgeLocation").appendChild(badge);
+    registerClip();
+  }
+}
 
-// document.getElementById("countryId").selectedIndex = 0;
-// document.getElementById("timeFrom").value = ""
+function registerClip() {
+  var clipBadge = document.getElementsByClassName("chipAction");
+  for (let i = 0; i < clipBadge.length; i++) {
+    clipBadge[i].onclick = function (event) {
+      let classPointer = event.target.getAttribute('activate');
+      document.getElementById(classPointer).firstElementChild.click()
+    }
+  }
+} 
 
-
-// query.onclick = function(event) {
-//   console.log("query onclick");
-//   console.log(event.target.parentElement);
-// };
-
-// country.onclick = function(event) {
-
-// };
-
-// domain.onclick = function(event) {
-
-// };
-
-// language.onclick = function(event) {
-
-// };
-
-// file.onclick = function(event) {
-
-// };
-
-// time.onclick = function(event) {
-
-// };

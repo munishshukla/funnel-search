@@ -1,7 +1,7 @@
 {
-  "name": "Getting Started Example",
+  "name": "Funnel Search",
   "version": "1.0",
-  "description": "Build an Extension!",
+  "description": "Advance search queries for google!",
   "permissions": ["activeTab", "declarativeContent", "storage"],
   "options_page": "options.html",
   "background": {
