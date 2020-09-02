@@ -118,6 +118,7 @@ function addClip(id, value, target) {
     // badge.classList.add("label-rounded");
     badge.classList.add('chip');
     badge.classList.add("chipAction");
+    
     badge.setAttribute('activate', target); // use for navigation
     badge.setAttribute('id', id + 'chip'); //use to remove chip
     badge.setAttribute('targetKey', id);
