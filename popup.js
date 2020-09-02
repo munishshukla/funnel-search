@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 "use strict";
+var storage = 'funnel_search';
 let menu = [];
 let query = document.getElementById("query");
 menu.push(query);
@@ -119,6 +120,15 @@ function addClip(id, value, target) {
     badge.classList.add("chipAction");
     badge.setAttribute('activate', target); // use for navigation
     badge.setAttribute('id', id + 'chip'); //use to remove chip
+    badge.setAttribute('targetKey', id);
+    let key = storage+'_'+id;
+    chrome.storage.sync.set({key: value}, function() {
+      console.log('chrome.storage.sync.set', key, value);
+      chrome.storage.sync.get(key, function(result) {
+        console.log('Value currently is ');
+        console.log(result.key);
+      });
+    });
     document.getElementById("badgeLocation").appendChild(badge);
     registerClip();
   }
