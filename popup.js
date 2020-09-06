@@ -16,10 +16,7 @@ let file = document.getElementById("file");
 menu.push(file);
 let time = document.getElementById("time");
 menu.push(time);
-// chrome.storage.sync.get('color', function(data) {
-//   changeColor.style.backgroundColor = data.color;
-//   changeColor.setAttribute('value', data.color);
-// });
+
 
 // changeColor.onclick = function(element) {
 //   let color = element.target.value;
@@ -120,6 +117,16 @@ function addClip(id, value, target) {
     badge.setAttribute('activate', target); // use for navigation
     badge.setAttribute('id', id + 'chip'); //use to remove chip
     document.getElementById("badgeLocation").appendChild(badge);
+    let save = {};
+    save[id] = value;
+    chrome.storage.sync.set(save, function() {
+      console.log('Value Saved!');
+    });
+
+    chrome.storage.sync.get(null, function(data) {
+      console.log(data);
+    });
+
     registerClip();
   }
 }
