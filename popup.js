@@ -17,7 +17,6 @@ menu.push(file);
 let time = document.getElementById("time");
 menu.push(time);
 
-
 // changeColor.onclick = function(element) {
 //   let color = element.target.value;
 //   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -58,12 +57,12 @@ for (let index = 0; index < removeElement.length; index++) {
     event.target.previousElementSibling.value = "";
     let chipId = event.target.previousElementSibling.id;
     removeChip(chipId);
-  }
+  };
 }
 
 function removeChip(id) {
-  let doc = document.getElementById(id + 'chip');
-  if(doc){
+  let doc = document.getElementById(id + "chip");
+  if (doc) {
     doc.remove();
   }
 }
@@ -74,13 +73,13 @@ for (let itr = 0; itr < textField.length; itr++) {
   element.onblur = function (event) {
     let id = event.target.id;
     let value = event.target.value;
-    let target = event.target.getAttribute('activate');
-    if (value && value.trim() !== '') {
+    let target = event.target.getAttribute("activate");
+    if (value && value.trim() !== "") {
       addClip(id, value, target);
-    }else{
+    } else {
       removeChip(id);
     }
-  }
+  };
 }
 
 var selectbox = document.getElementsByClassName("selectbox");
@@ -88,45 +87,46 @@ for (let itr = 0; itr < selectbox.length; itr++) {
   const element = selectbox[itr];
   element.onchange = function (event) {
     let id = event.target.id;
-    let target = event.target.getAttribute('activate');
+    let target = event.target.getAttribute("activate");
     let index = event.target.selectedIndex;
-    console.log('id', id);
-    console.log('target', this.target);
-    if(index===0){
+    console.log("id", id);
+    console.log("target", this.target);
+    if (index === 0) {
       // remove if exist
       removeChip(id);
-    }else{
+    } else {
       let value = event.target.options[index].text;
-      console.log('value',value);
+      console.log("value", value);
       addClip(id, value, target);
     }
-  }
+  };
 }
 
 function addClip(id, value, target) {
-  if (value && value.trim() !== '') {
+  if (value && value.trim() !== "") {
     value = value.trim();
-    var badge = document.createElement('span');
-    var textnode = document.createTextNode(value);
-    badge.appendChild(textnode);
-    // badge.classList.add("label");
-    // badge.classList.add("label-error");
-    // badge.classList.add("label-rounded");
-    badge.classList.add('chip');
-    badge.classList.add("chipAction");
-    badge.setAttribute('activate', target); // use for navigation
-    badge.setAttribute('id', id + 'chip'); //use to remove chip
-    document.getElementById("badgeLocation").appendChild(badge);
+
+    let doc = document.getElementById(id + "chip");
+    if (doc) {
+      doc.innerText = value;
+    } else {
+      var badge = document.createElement("span");
+      var textnode = document.createTextNode(value);
+      badge.appendChild(textnode);
+      // badge.classList.add("label");
+      // badge.classList.add("label-error");
+      // badge.classList.add("label-rounded");
+      badge.classList.add("chip");
+      badge.classList.add("chipAction");
+      badge.setAttribute("activate", target); // use for navigation
+      badge.setAttribute("id", id + "chip"); //use to remove chip
+      document.getElementById("badgeLocation").appendChild(badge);
+    }
     let save = {};
     save[id] = value;
-    chrome.storage.sync.set(save, function() {
-      console.log('Value Saved!');
+    chrome.storage.sync.set(save, function () {
+      console.log("Value Saved!");
     });
-
-    chrome.storage.sync.get(null, function(data) {
-      console.log(data);
-    });
-
     registerClip();
   }
 }
@@ -135,9 +135,16 @@ function registerClip() {
   var clipBadge = document.getElementsByClassName("chipAction");
   for (let i = 0; i < clipBadge.length; i++) {
     clipBadge[i].onclick = function (event) {
-      let classPointer = event.target.getAttribute('activate');
-      document.getElementById(classPointer).firstElementChild.click()
-    }
+      let classPointer = event.target.getAttribute("activate");
+      document.getElementById(classPointer).firstElementChild.click();
+    };
   }
-} 
+}
 
+document.getElementById('initiateSearch').onclick = function() {
+  console.log('-----------initiateSearch----------');
+  chrome.runtime.sendMessage({greeting: "GetURL"},
+  function (response) {
+   console.log("Waiting for response", response);
+  });
+};
