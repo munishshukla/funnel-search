@@ -141,10 +141,13 @@ function registerClip() {
   }
 }
 
-document.getElementById('initiateSearch').onclick = function() {
-  console.log('-----------initiateSearch----------');
-  chrome.runtime.sendMessage({greeting: "GetURL"},
-  function (response) {
-   console.log("Waiting for response", response);
+document.getElementById("initiateSearch").onclick = function () {
+  console.log("-----------initiateSearch----------");
+  chrome.runtime.sendMessage({ greeting: "GetURL" }, function (response) {
+    console.log("Waiting for response", response);
   });
 };
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log(request.msg);
+});

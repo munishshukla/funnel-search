@@ -18,22 +18,29 @@ chrome.runtime.onInstalled.addListener(function () {
   console.log("onInstalled");
 });
 
+chrome.browserAction.onClicked.addListener(function (tab) {
+  chrome.runtime.sendMessage({
+    msg: "something_completed"
+  });
+});
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log("In the Listener Function");
   chrome.tabs.query({ active: true }, function (tabs) {
     console.log(tabs);
     if (tabs.length === 0) {
+      chrome.tabs.create({ url: "http://www.google.com" });
       sendResponse({ data: "if case" });
       //return;
     } else {
-      sendResponse({ data: "else case" });
+      var tab = tabs[0];
+      if (tab.url && tab.url.includes("google.com")) {
+        chrome.tabs.update(tab.id, { url: "http://www.google.com" });
+      } else {
+        chrome.tabs.create({ url: "https://github.com/" });
+      }
+      sendResponse({ data: tab.url });
     }
   });
   return true;
-  // console.log(request);
-  // console.log(sender);
-  // console.log(sendResponse);
 });
-// {
-//   pageUrl: {hostEquals: 'developer.chrome.com'},
-// }
