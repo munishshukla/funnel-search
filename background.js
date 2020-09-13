@@ -25,19 +25,17 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log("In the Listener Function");
   chrome.tabs.query({ active: true }, function (tabs) {
-    console.log(tabs);
     if (tabs.length === 0) {
-      chrome.tabs.create({ url: "http://www.google.com" });
+      chrome.tabs.create({ url: request.url});
       sendResponse({ data: "if case" });
       //return;
     } else {
       var tab = tabs[0];
       if (tab.url && tab.url.includes("google.com")) {
-        chrome.tabs.update(tab.id, { url: "http://www.google.com" });
+        chrome.tabs.update(tab.id, { url: request.url });
       } else {
-        chrome.tabs.create({ url: "https://github.com/" });
+        chrome.tabs.create({ url: request.url });
       }
       sendResponse({ data: tab.url });
     }

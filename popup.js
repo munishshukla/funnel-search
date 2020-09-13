@@ -74,8 +74,11 @@ for (let itr = 0; itr < textField.length; itr++) {
     let id = event.target.id;
     let value = event.target.value;
     let target = event.target.getAttribute("activate");
+    let arg = event.target.getAttribute("arg");
+    let heading = event.target.getAttribute("heading");
+  
     if (value && value.trim() !== "") {
-      addClip(id, value, target);
+      addClip(id, value, target, arg, heading, value);
     } else {
       removeChip(id);
     }
@@ -88,38 +91,50 @@ for (let itr = 0; itr < selectbox.length; itr++) {
   element.onchange = function (event) {
     let id = event.target.id;
     let target = event.target.getAttribute("activate");
+    let arg = event.target.getAttribute("arg");
+    let heading = event.target.getAttribute("heading");
     let index = event.target.selectedIndex;
     console.log("id", id);
-    console.log("target", this.target);
+    console.log("target", target);
     if (index === 0) {
       // remove if exist
       removeChip(id);
     } else {
       let value = event.target.options[index].text;
-      console.log("value", value);
-      addClip(id, value, target);
+      let label = event.target.options[index].value;
+      console.log("valuelabel", value, label);
+      addClip(id, value, target, arg, heading, label);
     }
   };
 }
 
-function addClip(id, value, target) {
+function addClip(id, value, target, arg, heading, label) {
   if (value && value.trim() !== "") {
     value = value.trim();
 
     let doc = document.getElementById(id + "chip");
     if (doc) {
-      doc.innerText = value;
+      doc.lastChild.data = value;
+      doc.setAttribute("search",label);
     } else {
-      var badge = document.createElement("span");
+      var badge = document.createElement("div");
+      var figure = document.createElement("FIGURE");
+      figure.classList.add("avatar");
+      figure.classList.add("avatar-sm");
+      figure.setAttribute("data-initial", heading);
       var textnode = document.createTextNode(value);
+      badge.appendChild(figure);
       badge.appendChild(textnode);
       // badge.classList.add("label");
       // badge.classList.add("label-error");
       // badge.classList.add("label-rounded");
+      
       badge.classList.add("chip");
       badge.classList.add("chipAction");
       badge.setAttribute("activate", target); // use for navigation
       badge.setAttribute("id", id + "chip"); //use to remove chip
+      badge.setAttribute("arg",arg);
+      badge.setAttribute("search",label);
       document.getElementById("badgeLocation").appendChild(badge);
     }
     let save = {};
@@ -143,9 +158,41 @@ function registerClip() {
 
 document.getElementById("initiateSearch").onclick = function () {
   console.log("-----------initiateSearch----------");
-  chrome.runtime.sendMessage({ greeting: "GetURL" }, function (response) {
-    console.log("Waiting for response", response);
-  });
+  var clipBadge = document.getElementsByClassName("chipAction");
+  var query = [];
+  var timeRange = [];
+  var flag = 0; 
+  for (let i = 0; i < clipBadge.length; i++) {
+    let element = clipBadge[i];
+    let id = element.getAttribute("id");
+    let arg = element.getAttribute("arg");
+    let search = element.getAttribute("search");
+    if(id == 'queryIncludechip'){
+      flag = 1;
+    }
+    if(id == 'timeFromchip' || id == 'timeTochip' ){
+      timeRange.push(arg+':'+search);
+    }else{
+      query.push(arg+'='+search);
+    }
+  }
+  
+
+  if(flag==0){
+    document.getElementById('query').firstElementChild.click();
+    document.getElementById('queryInclude').style.borderColor="#e85600";
+  }else{
+    document.getElementById('queryInclude').style.borderColor="#bcc3ce";
+    let finalQuery = 'https://www.google.com/search?'+query.join('&');
+    // tbs=cdr:1,cd_min:9/2/2020,cd_max:9/12/2020
+    if(timeRange.length>0){
+      finalQuery+='&tbs=cdr:1,'+timeRange.join(',');
+    }
+    console.log("Final Query", finalQuery);
+    chrome.runtime.sendMessage({ url: encodeURI(finalQuery) }, function (response) {
+      console.log("Waiting for response", response);
+    });
+  }  
 };
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
