@@ -17,14 +17,7 @@ menu.push(file);
 let time = document.getElementById("time");
 menu.push(time);
 
-// changeColor.onclick = function(element) {
-//   let color = element.target.value;
-//   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-//     chrome.tabs.executeScript(
-//         tabs[0].id,
-//         {code: 'document.body.style.backgroundColor = "' + color + '";'});
-//   });
-// };
+
 for (let index = 0; index < menu.length; index++) {
   const element = menu[index];
   element.onclick = function (event) {
@@ -63,6 +56,10 @@ for (let index = 0; index < removeElement.length; index++) {
 function removeChip(id) {
   let doc = document.getElementById(id + "chip");
   if (doc) {
+    let key = id;
+    chrome.storage.sync.remove(key, function (item) {
+      console.log("Remove from storage", item);
+    });
     doc.remove();
   }
 }
@@ -71,12 +68,14 @@ var textField = document.getElementsByClassName("textfield");
 for (let itr = 0; itr < textField.length; itr++) {
   const element = textField[itr];
   element.onblur = function (event) {
+    console.log("on blur function");
+    console.log(event);
     let id = event.target.id;
     let value = event.target.value;
     let target = event.target.getAttribute("activate");
     let arg = event.target.getAttribute("arg");
     let heading = event.target.getAttribute("heading");
-  
+
     if (value && value.trim() !== "") {
       addClip(id, value, target, arg, heading, value);
     } else {
@@ -115,7 +114,7 @@ function addClip(id, value, target, arg, heading, label) {
     let doc = document.getElementById(id + "chip");
     if (doc) {
       doc.lastChild.data = value;
-      doc.setAttribute("search",label);
+      doc.setAttribute("search", label);
     } else {
       var badge = document.createElement("div");
       var figure = document.createElement("FIGURE");
@@ -128,13 +127,13 @@ function addClip(id, value, target, arg, heading, label) {
       // badge.classList.add("label");
       // badge.classList.add("label-error");
       // badge.classList.add("label-rounded");
-      
+
       badge.classList.add("chip");
       badge.classList.add("chipAction");
       badge.setAttribute("activate", target); // use for navigation
       badge.setAttribute("id", id + "chip"); //use to remove chip
-      badge.setAttribute("arg",arg);
-      badge.setAttribute("search",label);
+      badge.setAttribute("arg", arg);
+      badge.setAttribute("search", label);
       document.getElementById("badgeLocation").appendChild(badge);
     }
     let save = {};
@@ -161,40 +160,194 @@ document.getElementById("initiateSearch").onclick = function () {
   var clipBadge = document.getElementsByClassName("chipAction");
   var query = [];
   var timeRange = [];
-  var flag = 0; 
+  var flag = 0;
   for (let i = 0; i < clipBadge.length; i++) {
     let element = clipBadge[i];
     let id = element.getAttribute("id");
     let arg = element.getAttribute("arg");
     let search = element.getAttribute("search");
-    if(id == 'queryIncludechip'){
+    if (id == "queryIncludechip") {
       flag = 1;
     }
-    if(id == 'timeFromchip' || id == 'timeTochip' ){
-      timeRange.push(arg+':'+search);
-    }else{
-      query.push(arg+'='+search);
+    if (id == "timeFromchip" || id == "timeTochip") {
+      timeRange.push(arg + ":" + search);
+    } else {
+      query.push(arg + "=" + search);
     }
   }
-  
 
-  if(flag==0){
-    document.getElementById('query').firstElementChild.click();
-    document.getElementById('queryInclude').style.borderColor="#e85600";
-  }else{
-    document.getElementById('queryInclude').style.borderColor="#bcc3ce";
-    let finalQuery = 'https://www.google.com/search?'+query.join('&');
+  if (flag == 0) {
+    document.getElementById("query").firstElementChild.click();
+    document.getElementById("queryInclude").style.borderColor = "#e85600";
+  } else {
+    document.getElementById("queryInclude").style.borderColor = "#bcc3ce";
+    let finalQuery = "https://www.google.com/search?" + query.join("&");
     // tbs=cdr:1,cd_min:9/2/2020,cd_max:9/12/2020
-    if(timeRange.length>0){
-      finalQuery+='&tbs=cdr:1,'+timeRange.join(',');
+    if (timeRange.length > 0) {
+      finalQuery += "&tbs=cdr:1," + timeRange.join(",");
     }
     console.log("Final Query", finalQuery);
-    chrome.runtime.sendMessage({ url: encodeURI(finalQuery) }, function (response) {
+    chrome.runtime.sendMessage({ url: encodeURI(finalQuery) }, function (
+      response
+    ) {
       console.log("Waiting for response", response);
     });
-  }  
+  }
 };
+
+document.getElementById("initiateReset").onclick = function () {
+  
+  document.getElementById('queryInclude').nextElementSibling.click();
+  document.getElementById('queryExclude').nextElementSibling.click();
+  document.getElementById('queryExact').nextElementSibling.click();
+  document.getElementById('domainInput').nextElementSibling.click();
+
+
+  document.getElementById('timeFrom').value = '';
+  removeChip('timeFrom');
+  document.getElementById('timeTo').value = '';
+  removeChip('timeTo');
+
+  document.getElementById('countryId').selectedIndex = 0;
+  removeChip('countryId');
+  document.getElementById('languageId').selectedIndex = 0;
+  removeChip('languageId');
+  document.getElementById('lastupdate').selectedIndex = 0;
+  removeChip('lastupdate');
+  document.getElementById('fileId').selectedIndex = 0;
+  removeChip('fileId');
+}
+
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request.msg);
+});
+
+console.log("load");
+chrome.storage.sync.get("queryInclude", function (items) {
+  if (items) {
+    let key = Object.keys(items)[0];
+    let ele = document.getElementById(key);
+    ele.value = items[key];
+    ele.dispatchEvent(new Event("blur"));
+  }
+});
+chrome.storage.sync.get("queryExclude", function (items) {
+  console.log("-------------------Exclude---------------", items);
+  if (items) {
+    let key = Object.keys(items)[0];
+    if (key) {
+      let ele = document.getElementById(key);
+      ele.value = items[key];
+      ele.dispatchEvent(new Event("blur"));
+    }
+  }
+});
+chrome.storage.sync.get("queryExact", function (items) {
+  if (items) {
+    let key = Object.keys(items)[0];
+    if (key) {
+      let ele = document.getElementById(key);
+      ele.value = items[key];
+      ele.dispatchEvent(new Event("blur"));
+    }
+  }
+});
+chrome.storage.sync.get("domainInput", function (items) {
+  if (items) {
+    let key = Object.keys(items)[0];
+    if (key) {
+      let ele = document.getElementById(key);
+      ele.value = items[key];
+      ele.dispatchEvent(new Event("blur"));
+    }
+  }
+});
+chrome.storage.sync.get("countryId", function (items) {
+  console.log("countryId", items);
+  if (items) {
+    let key = Object.keys(items)[0];
+    if (key) {
+      let sel = document.getElementById(key);
+
+      for (var i = 0, j = sel.options.length; i < j; ++i) {
+        if (sel.options[i].text === items[key]) {
+          sel.selectedIndex = i;
+          break;
+        }
+      }
+      sel.dispatchEvent(new Event("change"));
+    }
+  }
+});
+chrome.storage.sync.get("languageId", function (items) {
+  if (items) {
+    let key = Object.keys(items)[0];
+    if (key) {
+      let sel = document.getElementById(key);
+
+      for (var i = 0, j = sel.options.length; i < j; ++i) {
+        if (sel.options[i].text === items[key]) {
+          sel.selectedIndex = i;
+          break;
+        }
+      }
+      sel.dispatchEvent(new Event("change"));
+    }
+  }
+});
+
+chrome.storage.sync.get("lastupdate", function (items) {
+  if (items) {
+    let key = Object.keys(items)[0];
+    if (key) {
+      let sel = document.getElementById(key);
+
+      for (var i = 0, j = sel.options.length; i < j; ++i) {
+        if (sel.options[i].text === items[key]) {
+          sel.selectedIndex = i;
+          break;
+        }
+      }
+      sel.dispatchEvent(new Event("change"));
+    }
+  }
+});
+chrome.storage.sync.get("fileId", function (items) {
+  if (items) {
+    let key = Object.keys(items)[0];
+    if (key) {
+      let sel = document.getElementById(key);
+
+      for (var i = 0, j = sel.options.length; i < j; ++i) {
+        if (sel.options[i].text === items[key]) {
+          sel.selectedIndex = i;
+          break;
+        }
+      }
+      sel.dispatchEvent(new Event("change"));
+    }
+  }
+});
+
+chrome.storage.sync.get("timeFrom", function (items) {
+  if (items) {
+    let key = Object.keys(items)[0];
+    if (key) {
+      let ele = document.getElementById(key);
+      ele.value = items[key];
+      ele.dispatchEvent(new Event("blur"));
+    }
+  }
+});
+
+chrome.storage.sync.get("timeTo", function (items) {
+  if (items) {
+    let key = Object.keys(items)[0];
+    if (key) {
+      let ele = document.getElementById(key);
+      ele.value = items[key];
+      ele.dispatchEvent(new Event("blur"));
+    }
+  }
 });
