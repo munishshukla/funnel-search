@@ -17,7 +17,6 @@ menu.push(file);
 let time = document.getElementById("time");
 menu.push(time);
 
-
 for (let index = 0; index < menu.length; index++) {
   const element = menu[index];
   element.onclick = function (event) {
@@ -196,28 +195,25 @@ document.getElementById("initiateSearch").onclick = function () {
 };
 
 document.getElementById("initiateReset").onclick = function () {
-  
-  document.getElementById('queryInclude').nextElementSibling.click();
-  document.getElementById('queryExclude').nextElementSibling.click();
-  document.getElementById('queryExact').nextElementSibling.click();
-  document.getElementById('domainInput').nextElementSibling.click();
+  document.getElementById("queryInclude").nextElementSibling.click();
+  document.getElementById("queryExclude").nextElementSibling.click();
+  document.getElementById("queryExact").nextElementSibling.click();
+  document.getElementById("domainInput").nextElementSibling.click();
 
+  document.getElementById("timeFrom").value = "";
+  removeChip("timeFrom");
+  document.getElementById("timeTo").value = "";
+  removeChip("timeTo");
 
-  document.getElementById('timeFrom').value = '';
-  removeChip('timeFrom');
-  document.getElementById('timeTo').value = '';
-  removeChip('timeTo');
-
-  document.getElementById('countryId').selectedIndex = 0;
-  removeChip('countryId');
-  document.getElementById('languageId').selectedIndex = 0;
-  removeChip('languageId');
-  document.getElementById('lastupdate').selectedIndex = 0;
-  removeChip('lastupdate');
-  document.getElementById('fileId').selectedIndex = 0;
-  removeChip('fileId');
-}
-
+  document.getElementById("countryId").selectedIndex = 0;
+  removeChip("countryId");
+  document.getElementById("languageId").selectedIndex = 0;
+  removeChip("languageId");
+  document.getElementById("lastupdate").selectedIndex = 0;
+  removeChip("lastupdate");
+  document.getElementById("fileId").selectedIndex = 0;
+  removeChip("fileId");
+};
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(request.msg);
@@ -227,9 +223,11 @@ console.log("load");
 chrome.storage.sync.get("queryInclude", function (items) {
   if (items) {
     let key = Object.keys(items)[0];
-    let ele = document.getElementById(key);
-    ele.value = items[key];
-    ele.dispatchEvent(new Event("blur"));
+    if (key) {
+      let ele = document.getElementById(key);
+      ele.value = items[key];
+      ele.dispatchEvent(new Event("blur"));
+    }
   }
 });
 chrome.storage.sync.get("queryExclude", function (items) {
