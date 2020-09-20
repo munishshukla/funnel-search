@@ -22,6 +22,14 @@
     color: #c66b3d;
     padding: .7rem .3rem .3rem .3rem;
   }
+  /* .chip {
+    color: #ffffff;
+    background: #e85600;
+  } */
+
+  figure {
+    background-color: #e85600 !important;
+  }
 
   .badge:not([data-badge])::after,
   .badge[data-badge]::after {
@@ -38,6 +46,10 @@
   }
 
   .icon-cross {
+    cursor: pointer;
+  }
+
+  .chip {
     cursor: pointer;
   }
 </style>
@@ -95,19 +107,22 @@
           <div id="queryContent">
             <div class="form-group">
               <div class="has-icon-right" data-tooltip="Lorem ipsum dolor sit amet">
-                <input class="form-input" type="text" placeholder="Include Words" id="queryInclude">
+                <input class="form-input textfield" type="text" placeholder="Search (required)" id="queryInclude"
+                  activate="query" arg="as_q" heading="SQ">
                 <i class="form-icon icon icon-cross removeData"></i>
               </div>
             </div>
             <div class="form-group">
               <div class="has-icon-right">
-                <input class="form-input" type="text" placeholder="Exclude Words" id="queryExclude">
+                <input class="form-input textfield" type="text" placeholder="Exclude Words" id="queryExclude"
+                  activate="query" arg="as_eq"  heading="EQ">
                 <i class="form-icon icon icon-cross removeData"></i>
               </div>
             </div>
             <div class="form-group">
               <div class="has-icon-right">
-                <input class="form-input" type="text" placeholder="Exact Match" id="queryExact">
+                <input class="form-input textfield" type="text" placeholder="Exact Match" id="queryExact"
+                  activate="query" arg="as_epq"  heading="EXQ">
                 <i class="form-icon icon icon-cross removeData"></i>
               </div>
             </div>
@@ -116,7 +131,7 @@
 
           <div id="countryContent" style="display: none;">
             <div class="form-group">
-              <select class="form-select" id="countryId">
+              <select class="form-select selectbox" id="countryId" activate="country" arg="cr"  heading="CR">
                 <option value="choose">Choose an option</option>
                 <option value="af">Afghanistan</option>
 
@@ -605,7 +620,7 @@
 
           <div id="domainContent" style="display: none;">
             <div class="has-icon-right">
-              <input class="form-input" type="text" placeholder="Domain" id="domainInput">
+              <input class="form-input textfield" type="text" placeholder="Domain" id="domainInput" activate="domain" arg="as_sitesearch"  heading="DO">
               <i class="form-icon icon icon-cross removeData"></i>
             </div>
           </div>
@@ -613,7 +628,7 @@
 
           <div id="languageContent" style="display: none;">
             <div class="form-group">
-              <select class="form-select" id="languageId">
+              <select class="form-select selectbox" id="languageId" activate="language" arg="lr"  heading="LAN">
                 <option value="choose">Choose an option</option>
                 <option value="lang_ar">Arabic</option>
 
@@ -691,7 +706,7 @@
 
           <div id="fileContent" style="display: none;">
             <div class="form-group">
-              <select class="form-select" id="fileId">
+              <select class="form-select selectbox" id="fileId" activate="file" arg="as_filetype"  heading="FT">
                 <option value="choose">Choose an option</option>
                 <option value="swf">Adobe Flash (.swf)</option>
                 <option value="pdf">Adobe Portable Document Format (.pdf)</option>
@@ -725,20 +740,17 @@
 
 
           <div id="timeContent" style="display: none;">
-            <div class="form-group">
+            <div class="form-group input-group">
+              <span class="input-group-addon">From</span>
+              <input class="form-input textfield" id="timeFrom" type="date" activate="time" arg="cd_min"  heading="FR">
+            </div>
 
-              <div class="has-icon-right">
-                <input class="form-input" id="timeFrom" type="date">
-              </div>
+            <div class="form-group input-group">
+              <span class="input-group-addon">To</span>
+              <input class="form-input textfield" id="timeTo" type="date" activate="time" arg="cd_max"  heading="TO">
             </div>
             <div class="form-group">
-
-              <div class="has-icon-right">
-                <input class="form-input" id="timeTo" type="date">
-              </div>
-            </div>
-            <div class="form-group">
-              <select class="form-select" id="timeRange">
+              <select class="form-select selectbox" id="lastupdate" activate="time" arg="as_qdr"  heading="LU">
                 <option value="choose">Last Update</option>
                 <option value="d">Past 24 Hours</option>
                 <option value="w">Past Week</option>
@@ -747,7 +759,6 @@
               </select>
             </div>
           </div>
-
 
           <!-- <div class="has-icon-right" data-tooltip="Lorem ipsum dolor sit amet">
             <input class="form-input" type="text" placeholder="Include Words"><i class="form-icon icon icon-cross"></i>
@@ -779,13 +790,9 @@
 
         </div>
         <div class="panel-footer">
-          <div class="column col-12" id="badgeLocation">
-            <span class="chip" id="test">Crime</span>
-            <span class="chip">Drama</span>
-            <span class="chip">Biography<a class="btn btn-clear" href="#" aria-label="Close" role="button">
-
-              </a></span>
-            <span class="chip">Mystery<a class="btn btn-clear" href="#" aria-label="Close" role="button"></a></span>
+          <div class="column col-12" id="badgeLocation">  
+            <!-- <span class="chip">Drama</span> -->
+            <!-- <span class="chip">Mystery<a class="btn btn-clear" href="#" aria-label="Close" role="button"></a></span> -->
           </div>
         </div>
 
@@ -794,7 +801,10 @@
 
     </div>
     <div class="panel-footer">
-      <button class="btn btn-error btn-block tooltip" data-tooltip="Lorem ipsum dolor sit amet">Search</button>
+      
+      <button class="btn btn-default tooltip" data-tooltip="Click to reset" id="initiateReset" style="border-color: #d95000;color:#d95000">Reset</button>
+      <button class="btn btn-error tooltip" data-tooltip="Click to search" id="initiateSearch" style="float:right">Search</button>
+
     </div>
   </div>
 </body>
