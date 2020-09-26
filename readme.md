@@ -6,6 +6,10 @@
 
 > Advance search operators for google search
 
+**Funnel Search**
+![Funnel Search GIF](https://github.com/munishshukla/public/blob/master/binary_search.gif?raw=true)
+![Funnel Search GIF](https://github.com/munishshukla/public/blob/master/shark_tank.gif?raw=true)
+
 ---
 ## Support
 Reach out to me at one of the following places!
