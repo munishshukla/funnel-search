@@ -1,7 +1,7 @@
 {
   "name": "Funnel Search",
-  "version": "1.0",
-  "description": "Advance search queries for google!",
+  "version": "0.0.0.1",
+  "description": "Advance search operators for google search",
   "permissions": ["tabs", "activeTab", "declarativeContent", "storage"],
   "background": {
     "scripts": ["background.js"],
