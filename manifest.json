@@ -2,7 +2,7 @@
   "name": "Funnel Search",
   "version": "0.0.0.1",
   "description": "Advance search operators for google search",
-  "permissions": ["tabs", "activeTab", "declarativeContent", "storage"],
+  "permissions": ["tabs", "storage"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
