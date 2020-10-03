@@ -8,7 +8,7 @@
 
 ---
 
-Hey there,
+## Hey there,
 
 Are you not able to find a relevant search result?
 Perform targeted oriented search queries with Funnel Search.  
