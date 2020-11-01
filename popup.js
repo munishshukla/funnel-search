@@ -240,11 +240,16 @@ document.getElementById("initiateSearch").onclick = function () {
   } else {
     document.getElementById("queryInclude").style.borderColor = "#bcc3ce";
     let finalQuery = "https://www.google.com/search?" + query.join("&");
+    if (document.querySelector('input[name="queryScope"]:checked')) {
+      finalQuery +=
+        "&" + document.querySelector('input[name="queryScope"]:checked').value;
+    }
     // tbs=cdr:1,cd_min:9/2/2020,cd_max:9/12/2020
     if (timeRange.length > 0) {
       finalQuery += "&tbs=cdr:1," + timeRange.join(",");
     }
     console.log("Final Query", finalQuery);
+
     chrome.runtime.sendMessage({ url: encodeURI(finalQuery) }, function (
       response
     ) {
@@ -275,6 +280,9 @@ document.getElementById("initiateReset").onclick = function () {
   removeChip("lastupdate");
   document.getElementById("fileId").selectedIndex = 0;
   removeChip("fileId");
+  if (document.querySelector('input[name="queryScope"]:checked')) {
+    document.querySelector('input[name="queryScope"]:checked').checked = false;
+  }
 };
 
 /**
