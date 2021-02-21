@@ -6,6 +6,8 @@
 
 > Advance search operators for google search
 
+<a href="https://chrome.google.com/webstore/detail/funnel-search/moncnfejkabmlhblomihhdoifkgpgkhh?hl=en" target="_blank">`Download From Google Web Store`</a>
+
 **Funnel Search**
 ![Funnel Search GIF](https://github.com/munishshukla/public/blob/master/binary_search.gif?raw=true)
 ![Funnel Search GIF](https://github.com/munishshukla/public/blob/master/shark_tank.gif?raw=true)
